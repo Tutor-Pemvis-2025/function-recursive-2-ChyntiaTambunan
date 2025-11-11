@@ -1,0 +1,115 @@
+name: Autograding Tests
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+permissions:
+  checks: write
+  actions: read
+  contents: read
+
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # --- TEST 1 ---
+      - name: test-recursive-01
+        id: test-recursive-01
+        uses: classroom-resources/autograding-io-grader@v1
+        with:
+          test-name: test-recursive-01
+          setup-command: javac TFUNC.java
+          command: java TFUNC
+          input: |
+            5
+          expected-output: |
+            Bilangan yang dimasukkan : 5
+            Hasil perhitungan rekursif : 15
+          comparison-method: exact
+          timeout: 3
+          max-score: 20
+
+      # --- TEST 2 ---
+      - name: test-recursive-02
+        id: test-recursive-02
+        uses: classroom-resources/autograding-io-grader@v1
+        with:
+          test-name: test-recursive-02
+          setup-command: javac TFUNC.java
+          command: java TFUNC
+          input: |
+            1
+          expected-output: |
+            Bilangan yang dimasukkan : 1
+            Hasil perhitungan rekursif : 1
+          comparison-method: exact
+          timeout: 3
+          max-score: 20
+
+      # --- TEST 3 ---
+      - name: test-recursive-03
+        id: test-recursive-03
+        uses: classroom-resources/autograding-io-grader@v1
+        with:
+          test-name: test-recursive-03
+          setup-command: javac TFUNC.java
+          command: java TFUNC
+          input: |
+            3
+          expected-output: |
+            Bilangan yang dimasukkan : 3
+            Hasil perhitungan rekursif : 6
+          comparison-method: exact
+          timeout: 3
+          max-score: 20
+
+      # --- TEST 4 ---
+      - name: test-recursive-04
+        id: test-recursive-04
+        uses: classroom-resources/autograding-io-grader@v1
+        with:
+          test-name: test-recursive-04
+          setup-command: javac TFUNC.java
+          command: java TFUNC
+          input: |
+            4
+          expected-output: |
+            Bilangan yang dimasukkan : 4
+            Hasil perhitungan rekursif : 10
+          comparison-method: exact
+          timeout: 3
+          max-score: 20
+
+      # --- TEST 5 ---
+      - name: test-recursive-05
+        id: test-recursive-05
+        uses: classroom-resources/autograding-io-grader@v1
+        with:
+          test-name: test-recursive-05
+          setup-command: javac TFUNC.java
+          command: java TFUNC
+          input: |
+            6
+          expected-output: |
+            Bilangan yang dimasukkan : 6
+            Hasil perhitungan rekursif : 21
+          comparison-method: exact
+          timeout: 3
+          max-score: 20
+
+      # --- REPORTER ---
+      - name: Autograding Reporter
+        uses: classroom-resources/autograding-grading-reporter@v1
+        env:
+          TEST-RECURSIVE-01_RESULTS: "${{steps.test-recursive-01.outputs.result}}"
+          TEST-RECURSIVE-02_RESULTS: "${{steps.test-recursive-02.outputs.result}}"
+          TEST-RECURSIVE-03_RESULTS: "${{steps.test-recursive-03.outputs.result}}"
+          TEST-RECURSIVE-04_RESULTS: "${{steps.test-recursive-04.outputs.result}}"
+          TEST-RECURSIVE-05_RESULTS: "${{steps.test-recursive-05.outputs.result}}"
+        with:
+          runners: test-recursive-01,test-recursive-02,test-recursive-03,test-recursive-04,test-recursive-05
